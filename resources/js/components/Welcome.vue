@@ -1,16 +1,16 @@
 <template>
    <div class="container" id="parent">
         <h1 class="text-center">{{ title }}</h1>
-        Unesi element lise: <input type="text" ref="input"/>
-        <button type="button" @click="insert" ref="button">Unesi</button>
-        <button type="button" @click="remove" ref="buttondelete">Izbrisi</button>
-         <ul>
-             <li v-for:="item in list" ref="list">
-               {{ item }} 
+        Unesi element lise: <input type="text" class="border border-success" ref="input"/>
+        <button type="button" @click="insert" class="btn btn-primary m-3" ref="button">Unesi</button>
+        <button type="button" @click="remove" class="btn btn-danger m-3" ref="buttondelete">Izbrisi</button>
+         <ul class="list-group">
+             <li v-for:="(item, index) in list" ref="list"  class="list-group-item d-flex justify-content-between">
+               <p>{{ item }}</p><button type="button" @click="removeitem(index)" class="btn btn-danger m-3" ref="buttonremove">Izbrisi</button>
               </li>
         </ul>
-        <div class="circle" ref="circle">
-
+        <div class="circle" :class="{'bg-danger': list.length > 5, 'bg-success':list.length <=5 }" ref="circle">
+                  <p>{{listlength}}</p>
         </div>
     </div>
     
@@ -27,25 +27,33 @@ export default {
     },
     methods:{
        insert(){
-         this.list.push(this.$refs.input.value)
-         if(this.list.length>4){
-            this.$refs.circle.style.backgroundColor="red"
-         }
+         this.list.push(this.$refs.input.value)      
        },
        remove(){
-          this.list.pop()
-          if(this.list.length<=4){
-            this.$refs.circle.style.backgroundColor="green"
+          this.list.pop()       
+       },
+       removeitem(index){
+          var newlist=[]
+          for(var i=0;i<this.list.length;i++){
+            if(i==index){
+                continue;
+            }
+            newlist.push(this.list[i])
           }
-       }      
-    }
+          this.list=newlist
+       }        
+    },
+    computed:{
+      listlength(){
+        return this.list.length
+      }
+    }  
+
 }
 </script>
 
 <style scoped>
-   .parent{
-    position:relative;
-   }
+  
    .circle{
     position: absolute;
     left:50%;
@@ -54,5 +62,11 @@ export default {
      height: 100px;
      background-color:green;
      border-radius:50%;
+     padding:10px;
+     padding-left:35px;
+     color:white;
+     font-size:50px;
    }
+   
+   
 </style>
