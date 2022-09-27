@@ -6,6 +6,33 @@
     <div class="bg-danger" v-if="response.errors">
       <p class="text-center text-light">{{ response.errors.join("") }}</p>
     </div>
+    <ul class="container row text-center list-unstyled">
+      <li class="col-4 p-3 bg-danger bg-gradient">
+        <a
+          href="#"
+          @click.prevent="this.$parent.showRegister"
+          class="text-decoration-none text-light"
+          >Register</a
+        >
+      </li>
+      <li class="col-4 p-3 bg-danger bg-gradient">
+        <a
+          href="#"
+          @click.prevent="this.$parent.showPosts"
+          class="text-decoration-none text-light"
+          >Posts</a
+        >
+      </li>
+      <li class="col-4 p-3 bg-danger bg-gradient">
+        <a
+          href="#"
+          @click.prevent="this.$parent.showAdd"
+          class="text-decoration-none text-light"
+          >Add Insurance</a
+        >
+      </li>
+    </ul>
+
     <form @submit.prevent="submitForm">
       <div class="row p-3 container w-75 mx-auto">
         <div class="form-group col-4">
@@ -16,9 +43,9 @@
             aria-describedby="emailHelp"
             placeholder="Enter email"
             v-model="email"
-             @keyup="v$.email.$touch"
+            @keyup="v$.email.$touch"
           />
-           <div class="text-danger" v-if="v$.email.$error">
+          <div class="text-danger" v-if="v$.email.$error">
             {{ v$.email.$errors[0].$message }}
           </div>
         </div>
@@ -29,9 +56,9 @@
             id="exampleInputPassword1"
             placeholder="Password"
             v-model="password"
-             @keyup="v$.password.$touch"
+            @keyup="v$.password.$touch"
           />
-           <div class="text-danger" v-if="v$.password.$error">
+          <div class="text-danger" v-if="v$.password.$error">
             {{ v$.password.$errors[0].$message }}
           </div>
         </div>
@@ -45,18 +72,14 @@
 
 <script>
 import { ref } from "vue";
-import {
-  minLength,
-  required,
-  email
-} from "@vuelidate/validators";
+import { minLength, required, email } from "@vuelidate/validators";
 import { useVuelidate } from "@vuelidate/core";
 import moment from "moment";
 export default {
-  setup(){
+  setup() {
     return {
-        v$: useVuelidate(),
-    }
+      v$: useVuelidate(),
+    };
   },
   data() {
     return {
@@ -71,7 +94,7 @@ export default {
       email: {
         required,
         minLengthValue: minLength(3),
-        email
+        email,
       },
       password: {
         required,
@@ -89,7 +112,11 @@ export default {
           email: this.email,
           password: this.password,
         })
-        .then((response) => (response.data.success ? window.location.href="/admin" :this.response = response.data))
+        .then((response) =>
+          response.data.success
+            ? (window.location.href = "/admin")
+            : (this.response = response.data)
+        )
         .catch((error) => (this.response = error.data));
     },
   },

@@ -16,6 +16,12 @@ class News extends Model
                    ->orderBy('id')
                    ->get();
     }
+    public function getPag(){
+        return DB::table('news')->select('news.*',DB::raw('CONCAT(users.name," ",users.surname) AS fullname'))
+                   ->join('users','news.user_id','=','users.id')
+                   ->orderBy('id')
+                   ->paginate(3);
+    }
     
     public function storeNews($request){
         return DB::table("news")->insert([

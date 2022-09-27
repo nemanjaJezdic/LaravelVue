@@ -18,4 +18,8 @@ class Person extends Model
            'insurance_id'=>$id
         ]);
     }
+    public function getPerson($id){
+        return DB::table('persons')->where('insurance_id',$id)
+                                   ->get();
+    }
 }

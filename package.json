@@ -28,6 +28,7 @@
         "@vuelidate/validators": "^2.0.0-alpha.31",
         "@vuepic/vue-datepicker": "^3.4.8",
         "@vueup/vue-quill": "^1.0.0-beta.10",
+        "laravel-vue-pagination": "^3.0.0",
         "moment": "^2.29.4",
         "sweetalert": "^2.1.2",
         "vuejs-datepicker": "^1.6.2"

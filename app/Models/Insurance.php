@@ -22,6 +22,7 @@ class Insurance extends Model
        ]);
     }
     public function getAll(){
-        return DB::table('insurances')->get();
+        return DB::table('insurances')
+        ->get();
     }
 }

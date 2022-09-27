@@ -20,12 +20,30 @@
           <td>{{ currency.surname }}</td>
           <td>{{ currency.phone }}</td>
           <td v-if="currency.type == 0">Individualno</td>
-          <td v-if="currency.type == 1">Grupno</td>
+          <td v-if="currency.type == 1">Grupno  <button class="btn btn-primary btn-sm" @click="getPersons(currency.id)">Show persons</button></td>
           <td>{{ format_date(currency.start_date) }}</td>
           <td>{{ format_date(currency.end_date) }}</td>
         </tr>
       </tbody>
     </table>
+     <div class="container" v-if="persons!=null">
+         <table class="table table-striped table-bordered mt-3">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Surname</th>
+          <th scope="col">Birthdate</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for:="pers in persons">
+          <td>{{ pers.name }}</td>
+          <td>{{ pers.surname }}</td>
+          <td>{{ format_date(pers.birth_date) }}</td>
+        </tr>
+      </tbody>
+    </table>
+     </div>
   </div>
 </template>
 
@@ -36,6 +54,7 @@ export default {
   data() {
     return {
       info: null,
+      persons:null
     };
   },
   mounted() {
@@ -45,6 +64,14 @@ export default {
       .catch((error) => console.log(error));
   },
   methods: {
+    getPersons(id){
+       axios
+      .post("/admin/persons",{
+        id})
+      .then((response) => {this.persons = response.data 
+      console.log(this.persons)})
+      .catch((error) => console.log(error));
+    },
     format_date(value) {
       if (value) {
         return moment(String(value)).format("D.M.Y");

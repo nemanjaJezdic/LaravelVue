@@ -75,6 +75,15 @@ class FormController extends Controller
 
         return view("adminnews");
     }
+    public function getNews(){
+        $news=new News();
+        $result=$news->getPag();
+
+            return response()->json($result);
+        
+
+        return view("adminnews");
+    }
 
     public function storeNews(Request $request){
         $news=new News();
@@ -132,5 +141,12 @@ class FormController extends Controller
          $result=$news->getAll();
  
          return response()->json($result);
+    }
+    public function getPersons(Request $request){
+        $persons=new Person();
+
+        $result=$persons->getPerson($request->id);
+
+        return response()->json($result);
     }
 }

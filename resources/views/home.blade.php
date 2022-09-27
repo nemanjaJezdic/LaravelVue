@@ -10,17 +10,7 @@
     </head>
     <body class="antialiased">
         <div id="app">
-            <div>
-                <login/>
-            </div>
-            <div>
-                <register/>
-            </div>
-            
-            <div >
-                <footerex/>  
-            </div>
-                 
+              <home/>
         </div>
         <script src="{{ mix('js/app.js') }}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

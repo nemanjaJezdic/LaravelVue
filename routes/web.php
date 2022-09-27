@@ -20,20 +20,28 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+// Route::get('/reaction', function () {
+//     return view('reaction');
+// });
+
 Route::get('/',[UserController::class,'index'])->name('home');
 Route::post('/register',[UserController::class,'register'])->name('register');
 Route::post('/login',[UserController::class,'login'])->name('login');
 Route::get('/logout',[UserController::class,'logout'])->name('logout');
 
+Route::get('/form',[FormController::class,'index'])->name("form");
+Route::post('/storein',[FormController::class,'storeInsurance'])->name('storein');
+
+Route::get('/admin/news',[FormController::class,'adminNews'])->name("admin.news");
+Route::get('/news',[FormController::class,'getNews'])->name("news");
+
 Route::middleware([LoginMiddleware::class])->group(function(){
-    Route::get('/form',[FormController::class,'index'])->name("form");
-    Route::post('/storein',[FormController::class,'storeInsurance'])->name('storein');
     Route::get('/admin',[FormController::class,'adminList'])->name("admin");
     Route::get('/admin/insurance',[FormController::class,'adminInsurance'])->name("admin.insurance");
-    Route::get('/admin/news',[FormController::class,'adminNews'])->name("admin.news");
     Route::post('/storenews',[FormController::class,'storeNews'])->name('storenews');
     Route::get('/admin/onenews',[FormController::class,'adminNewsOne'])->name("admin.newsone");
     Route::get('/admin/delete/{id}',[FormController::class,'deleteNews'])->name("admin.delete");
     Route::get('/admin/publish/{id}',[FormController::class,'publishNews'])->name("admin.publish");
     Route::get('/admin/archive/{id}',[FormController::class,'archiveNews'])->name("admin.archive");
+    Route::post('/admin/persons',[FormController::class,'getPersons'])->name("admin.persons");
 });
