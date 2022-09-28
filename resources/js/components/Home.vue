@@ -12,7 +12,7 @@
     <post-list />
   </div>
 
-  <div>
+  <div v-if="loadingPosts==false">
     <footerex />
   </div>
 </template>
@@ -28,7 +28,8 @@ export default {
     components:{Login,Register,Footerex,Formres,PostList},
     data(){
         return {
-            show:'register'
+            show:'register',
+            loadingPosts:false
         }
     },
     methods:{

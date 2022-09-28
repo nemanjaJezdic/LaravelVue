@@ -9,7 +9,7 @@
     </div>  
     <div class="container mt-3">
       <div v-if="show=='news'">
-          <news></news>
+             <news></news>
       </div>    
     </div>
     <div v-if="show=='insurance'">
@@ -22,12 +22,13 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import Insurance from './AdminIns.vue'
 import News from './Adminnews.vue'
 import Formres from './Formres.vue'
 
 export default {
-  components:{Insurance,News,Formres},
+  components:{Insurance, News ,Formres},
   data() {
     return {
       title: "Admin view",

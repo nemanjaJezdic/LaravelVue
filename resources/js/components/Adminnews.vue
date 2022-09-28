@@ -23,7 +23,7 @@
       </teleport>
     </div>
 
-    <table class="table table-striped table-bordered mt-3">
+    <!-- <table class="table table-striped table-bordered mt-3">
       <thead class="thead-light">
         <tr>
           <th scope="col">#</th>
@@ -52,7 +52,15 @@
               @click="showActions(currency.id)"
             ></i>
             <div
-              class="bg-light position-absolute d-flex flex-column p-3 rounded showA"
+              class="
+                bg-light
+                position-absolute
+                d-flex
+                flex-column
+                p-3
+                rounded
+                showA
+              "
               v-if="showAction == 'show' && actionid == currency.id"
             >
               <a
@@ -91,7 +99,79 @@
           </td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
+    <div class="container position-absolute top-50 start-50" v-if="loading==true">
+            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+      </div> 
+    <easy-data-table
+      class="mt-3"
+      alternating
+      border-cell
+      buttons-pagination
+      rows-per-page="4"
+      :headers="headers"
+      :items="items"
+      v-if="loading==false"
+    >    
+      <template #item-created_at="{ created_at }">
+        {{ format_date(created_at) }}
+      </template>
+      <template #item-published_at="{ published_at }">
+        {{ format_date(published_at) }}
+      </template>
+      <template class="position-relative" #item-action="item">
+        <i
+          class="fa fa-ellipsis-v bg-light p-3 rounded-circle ms-1"
+          id="icon"
+          @click="showActions(item.id)"
+        ></i>
+        <div
+          class="
+            bg-light
+            position-absolute
+            d-flex
+            flex-column
+            p-3
+            rounded
+            showA
+          "
+          v-if="showAction == 'show' && actionid == item.id"
+        >
+          <a
+            href="#"
+            @click="loadPreview(item.id)"
+            class="text-secondary text-decoration-none"
+            >Preview</a
+          >
+          <a
+            href="#"
+            @click="loadEdit(item)"
+            class="text-secondary text-decoration-none"
+            >Edit</a
+          >
+          <a
+            href="#"
+            @click="deleteNews(item.id)"
+            class="text-secondary text-decoration-none"
+            >Delete</a
+          >
+          <a
+            href="#"
+            @click.prevent="publishNews(item.id)"
+            v-if="item.status == 'in process'"
+            class="text-secondary text-decoration-none"
+            >Publish</a
+          >
+          <a
+            href="#"
+            @click.prevent="archiveNews(item.id)"
+            v-if="item.status == 'published'"
+            class="text-secondary text-decoration-none"
+            >Archive</a
+          >
+        </div>
+      </template>
+    </easy-data-table>
   </div>
 </template>
 
@@ -99,9 +179,11 @@
 import moment from "moment";
 import Create from "./Createnewsform.vue";
 import Post from "./Post.vue";
+import EasyDataTable from "vue3-easy-data-table";
+import "vue3-easy-data-table/dist/style.css";
 
 export default {
-  components: { Create, Post },
+  components: { Create, Post, EasyDataTable },
   data() {
     return {
       info: null,
@@ -110,12 +192,27 @@ export default {
       actionid: 0,
       newsid: 0,
       currentNews: null,
+      headers: [
+        { text: "#", value: "id" },
+        { text: "CREATED", value: "created_at" },
+        { text: "TITLE", value: "title" },
+        { text: "DESCRIPTION", value: "desc" },
+        { text: "STATUS", value: "status" },
+        { text: "PUBLISHED", value: "published_at" },
+        { text: "AUTOR", value: "fullname" },
+        { text: "Action", value: "action" },
+      ],
+      items: [],
+      loading:true
     };
   },
   mounted() {
     axios
       .get("/admin/news")
-      .then((response) => (this.info = response.data))
+      .then((response) => {
+        this.items = response.data;
+        this.loading = false;
+      })
       .catch((error) => console.log(error));
   },
   methods: {
@@ -125,7 +222,7 @@ export default {
       }
     },
     loadCreate() {
-      this.showAction=""
+      this.showAction = "";
       if (this.show == "create") {
         this.currentNews = null;
         return (this.show = "");
@@ -134,7 +231,7 @@ export default {
       return (this.show = "create");
     },
     loadEdit(current) {
-           this.showAction=""
+      this.showAction = "";
       if (this.show == "create") {
         this.currentNews = null;
         return (this.show = "");
@@ -143,7 +240,7 @@ export default {
       return (this.show = "create");
     },
     loadPreview(id, e) {
-           this.showAction=""
+      this.showAction = "";
       if (this.show == "preview") {
         this.newsid = 0;
         return (this.show = "");
@@ -157,7 +254,7 @@ export default {
     deleteNews(id) {
       axios
         .get("/admin/delete/" + id)
-        .then((response) => (this.info = response.data))
+        .then((response) => (this.items = response.data))
         .catch((error) => console.log(error));
     },
     showActions(id) {
@@ -171,13 +268,13 @@ export default {
     publishNews(id) {
       axios
         .get("/admin/publish/" + id)
-        .then((response) => (this.info = response.data))
+        .then((response) => (this.items = response.data))
         .catch((error) => console.log(error));
     },
     archiveNews(id) {
       axios
         .get("/admin/archive/" + id)
-        .then((response) => (this.info = response.data))
+        .then((response) => (this.items = response.data))
         .catch((error) => console.log(error));
     },
   },
@@ -217,8 +314,44 @@ export default {
 a:hover {
   background-color: white;
 }
-.showA{
-  top:0px;
-  right:60px;
+.showA {
+  z-index: 3;
+  top: 0px;
+  right: 60px;
+}
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid #00FFFF;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #00FFFF transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

@@ -31,6 +31,8 @@
         "laravel-vue-pagination": "^3.0.0",
         "moment": "^2.29.4",
         "sweetalert": "^2.1.2",
+        "vue-final-modal": "^3.4.4",
+        "vue3-easy-data-table": "^1.4.19",
         "vuejs-datepicker": "^1.6.2"
     }
 }

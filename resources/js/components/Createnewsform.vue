@@ -170,7 +170,7 @@ export default {
               swal("Good Job!", "News successfuly created", "success");
               axios
                 .get("/admin/news")
-                .then((response) => (this.$parent.info = response.data))
+                .then((response) => (this.$parent.items = response.data))
                 .catch((error) => console.log(error));
             })
             .catch((error) => console.log(error));
@@ -193,7 +193,7 @@ export default {
                   swal("Good Job!", "News successfuly created", "success");
                   axios
                     .get("/admin/news")
-                    .then((response) => (this.$parent.info = response.data))
+                    .then((response) => (this.$parent.items = response.data))
                     .catch((error) => console.log(error));
                 })
                 .catch((error) => console.log(error));

@@ -20,9 +20,9 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-// Route::get('/reaction', function () {
-//     return view('reaction');
-// });
+Route::get('/reaction', function () {
+    return view('reaction');
+});
 
 Route::get('/',[UserController::class,'index'])->name('home');
 Route::post('/register',[UserController::class,'register'])->name('register');
