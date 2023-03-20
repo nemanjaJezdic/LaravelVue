@@ -7,7 +7,7 @@
     <div class="bg-danger" v-if="response.errors">
       <p class="text-center text-light">{{ response.errors.join("") }}</p>
     </div>
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="submitForm" class="needs-validation">
       <div class="form-group mt-3">
         <label for="email">Name</label>
         <input
@@ -15,9 +15,9 @@
           class="form-control"
           id="email"
           v-model="name"
-          required
           @keyup="v$.name.$touch"
           placeholder="Enter your name"
+          :class="{'is-invalid': v$.name.$errors.length > 0}"
         />
         <div class="text-danger" v-if="v$.name.$error">
           {{ v$.name.$errors[0].$message }}
@@ -29,10 +29,10 @@
           type="text"
           class="form-control"
           id="surname"
-          required
           @keyup="v$.surname.$touch"
           v-model="surname"
           placeholder="Enter your surname"
+          :class="{'is-invalid': v$.surname.$errors.length > 0}"
         />
         <div class="text-danger" v-if="v$.surname.$error">
           {{ v$.surname.$errors[0].$message }}
@@ -44,9 +44,9 @@
           type="text"
           class="form-control"
           id="phone"
-          required
           @keyup="v$.phone.$touch"
           v-model="phone"
+          :class="{'is-invalid': v$.phone.$errors.length > 0 }"
           placeholder="Enter your phone"
         />
         <div class="text-danger" v-if="v$.phone.$error">
@@ -71,10 +71,10 @@
             type="text"
             class="form-control"
             id="name2"
-            required
             v-model="name2"
             @keyup="v$.name2.$touch"
             placeholder="Enter your name"
+            :class="{'is-invalid': v$.name2.$errors.length > 0  }"
           />
           <div class="text-danger" v-if="v$.name2.$error">
             {{ v$.name2.$errors[0].$message }}
@@ -86,10 +86,10 @@
             type="text"
             class="form-control"
             id="surname2"
-            required
             @keyup="v$.surname2.$touch"
             v-model="surname2"
             placeholder="Enter your surname"
+            :class="{'is-invalid': v$.surname2.$errors.length > 0 }"
           />
           <div class="text-danger" v-if="v$.surname2.$error">
             {{ v$.surname2.$errors[0].$message }}
@@ -263,6 +263,8 @@ export default {
       }
     },
     submitForm() {
+      const iscor=this.v$.$validate()
+      if(!iscor) return;
       if (this.number_of_days > 0) {
         this.$refs.daysError.innerHTML = "";
         axios
